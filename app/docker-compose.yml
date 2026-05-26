@@ -1,0 +1,20 @@
+# Optional MySQL 8 for local development (install Docker Desktop first).
+# Usage:
+#   docker compose up -d mysql
+#   Ensure .env matches: DB_CONNECTION=mysql DB_DATABASE=chatbot_hub DB_USERNAME=root DB_PASSWORD=secret
+#
+services:
+  mysql:
+    image: mysql:8.0
+    restart: unless-stopped
+    ports:
+      - "${MYSQL_PORT:-3306}:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD:-secret}"
+      MYSQL_DATABASE: "${MYSQL_DATABASE:-chatbot_hub}"
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - mysql-chatbot-hub:/var/lib/mysql
+
+volumes:
+  mysql-chatbot-hub:

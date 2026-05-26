@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ChatFlow — Live Preview</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+      min-height: 100vh;
+      color: #e2e8f0;
+    }
+    .page { max-width: 1100px; margin: 0 auto; padding: 48px 24px 120px; }
+    h1 { font-size: 2rem; margin: 0 0 8px; }
+    .sub { color: #94a3b8; margin-bottom: 32px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+    .card {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 24px;
+    }
+    .card h2 { margin: 0 0 12px; font-size: 1.1rem; color: #a5b4fc; }
+    .card p, .card li { color: #94a3b8; font-size: 14px; line-height: 1.6; }
+    .card ul { padding-left: 18px; }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      background: #4f46e5;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+    .mock-site {
+      background: #fff;
+      color: #0f172a;
+      border-radius: 12px;
+      min-height: 320px;
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    .mock-site h3 { margin: 0 0 8px; }
+    .mock-site p { color: #64748b; font-size: 14px; }
+    .note {
+      margin-top: 24px;
+      padding: 16px;
+      border-radius: 12px;
+      background: #422006;
+      border: 1px solid #b45309;
+      color: #fde68a;
+      font-size: 13px;
+    }
+    .note code { background: #1c1917; padding: 2px 6px; border-radius: 4px; }
+    /* Widget (same as chatbot.js) */
+    #chatflow-root {
+      --cf-primary: #4F46E5;
+      --cf-secondary: #6366F1;
+      font-family: system-ui, sans-serif;
+      z-index: 9999;
+    }
+    #chatflow-launcher {
+      position: fixed; bottom: 24px; right: 24px;
+      width: 56px; height: 56px; border-radius: 50%; border: none; cursor: pointer;
+      box-shadow: 0 8px 24px rgba(0,0,0,.25);
+      background: var(--cf-primary); color: #fff; font-size: 24px;
+    }
+    #chatflow-panel {
+      position: fixed; bottom: 92px; right: 24px;
+      width: 380px; max-width: calc(100vw - 32px);
+      height: 480px; max-height: 70vh;
+      border-radius: 16px; overflow: hidden;
+      display: flex; flex-direction: column;
+      box-shadow: 0 16px 48px rgba(0,0,0,.3);
+      background: #fff; color: #0f172a;
+    }
+    #chatflow-header {
+      padding: 16px;
+      background: linear-gradient(135deg, var(--cf-primary), var(--cf-secondary));
+      color: #fff; display: flex; align-items: center; gap: 12px;
+    }
+    #chatflow-header .avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(255,255,255,.2);
+      display: flex; align-items: center; justify-content: center;
+    }
+    #chatflow-messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+    .cf-msg { max-width: 85%; padding: 10px 14px; border-radius: 14px; font-size: 14px; line-height: 1.45; }
+    .cf-msg.bot { align-self: flex-start; background: #f1f5f9; }
+    .cf-msg.user { align-self: flex-end; background: var(--cf-primary); color: #fff; }
+    #chatflow-suggestions { padding: 8px 16px; display: flex; flex-wrap: wrap; gap: 6px; }
+    .cf-chip {
+      font-size: 12px; padding: 6px 10px; border-radius: 999px;
+      border: 1px solid var(--cf-primary); color: var(--cf-primary);
+      background: transparent; cursor: pointer;
+    }
+    #chatflow-input-row { display: flex; gap: 8px; padding: 12px; border-top: 1px solid #e2e8f0; }
+    #chatflow-input { flex: 1; border: 1px solid #cbd5e1; border-radius: 10px; padding: 10px 12px; font-size: 14px; }
+    #chatflow-send { border: none; background: var(--cf-primary); color: #fff; border-radius: 10px; padding: 0 16px; cursor: pointer; }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <span class="badge">Static preview</span>
+    <h1>ChatFlow Widget Preview</h1>
+    <p class="sub">Interactive demo of the embeddable chatbot UI. Full stack requires PHP 8.3+ and <code>php artisan serve</code>.</p>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Sample website</h2>
+        <div class="mock-site">
+          <h3>Your Company Website</h3>
+          <p>This area simulates a customer site with the chat widget in the bottom-right corner.</p>
+          <p>Click the chat bubble to open the assistant.</p>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Dashboard-driven settings (demo)</h2>
+        <ul>
+          <li><strong>Bot:</strong> Sky Assistant</li>
+          <li><strong>Theme:</strong> Light · Position: Right</li>
+          <li><strong>Colors:</strong> #4F46E5 / #6366F1</li>
+          <li><strong>AI:</strong> gpt-4o-mini · temp 0.7</li>
+        </ul>
+        <p style="margin-top:12px">Suggested questions and replies below are simulated. With the API running, all content loads from <code>/api/widget/{token}/config</code>.</p>
+      </div>
+    </div>
+
+    <div class="note">
+      <strong>PHP 8.1 detected on this machine.</strong> Laravel 13 needs PHP 8.3+. Install PHP 8.3, then run:
+      <code>cd e:\website\chatbot-platform\app</code> →
+      <code>php artisan migrate --seed</code> →
+      <code>php artisan serve</code> → open
+      <a href="http://localhost:8000/login" style="color:#fde68a">http://localhost:8000/login</a>
+    </div>
+  </div>
+
+  <div id="chatflow-root">
+    <button type="button" id="chatflow-launcher" aria-label="Open chat">💬</button>
+    <div id="chatflow-panel" class="hidden">
+      <div id="chatflow-header">
+        <div class="avatar">🤖</div>
+        <div><strong>Sky Assistant</strong><br><small style="opacity:.85">Online</small></div>
+      </div>
+      <div id="chatflow-messages"></div>
+      <div id="chatflow-suggestions"></div>
+      <div id="chatflow-input-row">
+        <input id="chatflow-input" type="text" placeholder="Type a message..." />
+        <button type="button" id="chatflow-send">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const DEMO = {
+      welcome: 'Hi! How can I help you today?',
+      suggestions: ['What are your hours?', 'How do I contact support?', 'Tell me about your products'],
+      replies: {
+        'what are your hours': 'We are open Monday–Friday, 9 AM – 5 PM (UTC).',
+        'how do i contact support': 'Email support@example.com or use this chat to reach an agent.',
+        'tell me about your products': 'We offer cutting-edge plotter solutions and software for professionals.',
+        'default': 'Thanks for your message! In production, this is answered via Q&A, knowledge base, or AI.'
+      }
+    };
+    const messages = document.getElementById('chatflow-messages');
+    const panel = document.getElementById('chatflow-panel');
+    const launcher = document.getElementById('chatflow-launcher');
+    let open = false;
+
+    function addMsg(type, text) {
+      const el = document.createElement('div');
+      el.className = 'cf-msg ' + type;
+      el.textContent = text;
+      messages.appendChild(el);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    function toggle() {
+      open = !open;
+      panel.classList.toggle('hidden', !open);
+      launcher.textContent = open ? '✕' : '💬';
+      if (open && messages.childElementCount === 0) {
+        addMsg('bot', DEMO.welcome);
+      }
+    }
+
+    function reply(text) {
+      const key = text.toLowerCase().trim();
+      let ans = DEMO.replies.default;
+      for (const [k, v] of Object.entries(DEMO.replies)) {
+        if (k !== 'default' && key.includes(k.replace(/\?/g, ''))) ans = v;
+      }
+      setTimeout(() => addMsg('bot', ans), 600);
+    }
+
+  launcher.addEventListener('click', toggle);
+    document.getElementById('chatflow-send').addEventListener('click', send);
+    document.getElementById('chatflow-input').addEventListener('keydown', e => { if (e.key === 'Enter') send(); });
+
+    function send() {
+      const input = document.getElementById('chatflow-input');
+      const t = input.value.trim();
+      if (!t) return;
+      addMsg('user', t);
+      input.value = '';
+      reply(t);
+    }
+
+    const sug = document.getElementById('chatflow-suggestions');
+    DEMO.suggestions.forEach(q => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'cf-chip';
+      b.textContent = q;
+      b.onclick = () => { if (!open) toggle(); addMsg('user', q); reply(q); };
+      sug.appendChild(b);
+    });
+  </script>
+</body>
+</html>

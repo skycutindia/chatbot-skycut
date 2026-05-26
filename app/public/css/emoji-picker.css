@@ -1,0 +1,103 @@
+/* Shared emoji picker (agent inbox + widget) */
+.emoji-picker-panel {
+    position: absolute;
+    bottom: calc(100% + 0.5rem);
+    left: 0;
+    z-index: 40;
+    width: min(280px, calc(100vw - 2rem));
+    padding: 0.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--dash-border, #e2e8f0);
+    background: var(--dash-surface, #fff);
+    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.15);
+}
+
+.emoji-picker-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.emoji-picker-tab {
+    border: none;
+    background: transparent;
+    color: var(--dash-muted, #64748b);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: 999px;
+    cursor: pointer;
+}
+
+.emoji-picker-tab-active {
+    background: var(--dash-accent-soft, rgba(37, 99, 235, 0.12));
+    color: var(--dash-accent, #2563eb);
+}
+
+.emoji-picker-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 0.125rem;
+    max-height: 160px;
+    overflow-y: auto;
+}
+
+.emoji-picker-item {
+    border: none;
+    background: transparent;
+    font-size: 1.125rem;
+    line-height: 1;
+    padding: 0.35rem;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.emoji-picker-item:hover {
+    background: var(--dash-hover, rgba(148, 163, 184, 0.15));
+}
+
+.lc-compose-picker-wrap,
+.cf-input-wrap {
+    position: relative;
+}
+
+.lc-emoji-btn,
+.cf-emoji-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border: none;
+    background: transparent;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 1.125rem;
+    flex-shrink: 0;
+}
+
+.lc-emoji-btn:hover,
+.cf-emoji-btn:hover {
+    background: var(--dash-hover, rgba(148, 163, 184, 0.15));
+}
+
+#chatflow-footer .emoji-picker-panel {
+    left: auto;
+    right: 0;
+    border-color: var(--cf-border, #e2e8f0);
+    background: var(--cf-surface, #fff);
+}
+
+#chatflow-footer .emoji-picker-tab {
+    color: var(--cf-muted, #64748b);
+}
+
+#chatflow-footer .emoji-picker-tab-active {
+    background: rgba(37, 99, 235, 0.12);
+    color: var(--cf-primary, #2563eb);
+}
+
+#chatflow-footer .emoji-picker-item:hover {
+    background: rgba(148, 163, 184, 0.15);
+}

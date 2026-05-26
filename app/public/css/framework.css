@@ -1,0 +1,154 @@
+/**
+ * Chatbot Hub Pro — UI framework layer
+ * Load before dashboard-theme.css. Provides layout primitives, responsive grids, and a11y.
+ */
+
+:root {
+  --cf-space-1: 0.25rem;
+  --cf-space-2: 0.5rem;
+  --cf-space-3: 0.75rem;
+  --cf-space-4: 1rem;
+  --cf-space-5: 1.25rem;
+  --cf-space-6: 1.5rem;
+  --cf-space-8: 2rem;
+  --cf-container: 72rem;
+  --cf-touch: 44px;
+  --cf-font: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Layout */
+.cf-container {
+  width: 100%;
+  max-width: var(--cf-container);
+  margin-inline: auto;
+  padding-inline: var(--cf-space-4);
+}
+
+.cf-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cf-space-4);
+}
+
+.cf-cluster {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--cf-space-2);
+}
+
+.cf-split {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--cf-space-3);
+}
+
+/* Responsive grid */
+.cf-grid {
+  display: grid;
+  gap: var(--cf-space-4);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .cf-grid.cf-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 768px) {
+  .cf-grid.cf-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .cf-grid.cf-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+/* Forms */
+.cf-form-grid {
+  display: grid;
+  gap: var(--cf-space-4);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .cf-form-grid.cf-form-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* Tables — horizontal scroll on small screens */
+.cf-table-scroll,
+.dash-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--dash-radius-lg, 12px);
+}
+
+.cf-table-scroll table,
+.dash-table-wrap table {
+  min-width: 640px;
+}
+
+/* Dashboard page shell */
+.dash-page {
+  width: 100%;
+  max-width: var(--cf-container);
+  margin-inline: auto;
+  padding-bottom: var(--cf-space-8);
+}
+
+/* Touch-friendly controls on mobile */
+@media (max-width: 767px) {
+  .dash-btn-primary,
+  .dash-btn-secondary,
+  .dash-btn-ghost,
+  .demo-btn {
+    min-height: var(--cf-touch);
+    padding-block: 0.625rem;
+  }
+
+  .dash-input,
+  .dash-textarea,
+  .dash-select {
+    font-size: 16px; /* prevents iOS zoom on focus */
+  }
+
+  .dash-card {
+    padding: var(--cf-space-4);
+  }
+}
+
+/* Focus visible (keyboard a11y) */
+:focus-visible {
+  outline: 2px solid var(--dash-accent, #2563eb);
+  outline-offset: 2px;
+}
+
+/* Auth pages */
+.auth-page {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--cf-space-6) var(--cf-space-4);
+  background: var(--dash-bg, #f4f6f9);
+  font-family: var(--cf-font);
+}
+
+.auth-card-wrap {
+  width: 100%;
+  max-width: 26rem;
+}
+
+.auth-form {
+  padding: var(--cf-space-6);
+}
+
+/* Safe areas (notched phones) */
+@supports (padding: max(0px)) {
+  .dash-shell-content {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+
+  #chatflow-panel {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
